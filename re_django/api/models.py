@@ -26,11 +26,11 @@ class SellerInfo(models.Model):
         (COMPANY, 'Company'),
     ]
 
-    user = models.ForeignKey(Seller, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
     seller_name = models.CharField(max_length=64)
     info = models.TextField(blank=True,)
-    photo = models.ImageField(blank=True)
-    date_of_birth = models.DateField(blank=True,)
+    photo = models.ImageField(blank=True,)
+    dob = models.DateField(blank=True,)
     country = models.CharField(max_length=50, blank=True,)
     city = models.CharField(max_length=50, blank=True,)
     phone = PhoneNumberField(null=False, blank=True, unique=True,)
