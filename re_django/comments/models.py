@@ -13,7 +13,7 @@ class Rating(models.Model):
     (1, '1'),
     )
 
-    from_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="from+", on_delete=models.CASCADE)
+    from_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="comments", on_delete=models.CASCADE)
     user_to = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="to+", on_delete=models.CASCADE)
     text = models.TextField(blank=True,)
     rating = models.PositiveIntegerField(choices=RATING_CHOICES, default= 5)
