@@ -4,6 +4,7 @@ from comments.models import Rating
 from comments.serializers import RatingSerializer
 from django.db.models import Avg
 
+
 class SellerInfoSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -32,7 +33,10 @@ class SellerSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Seller
         fields = ('url', 'email', 'first_name', 'last_name', 'password', 'profile', 'comments', 'average_rating') # <--- 2 new
-        extra_kwargs = {'password': {'write_only': True}}
+        extra_kwargs = {
+        'password': {'write_only': True},
+        }
+
 
     def create(self, validated_data):
         password = validated_data.pop('password')
