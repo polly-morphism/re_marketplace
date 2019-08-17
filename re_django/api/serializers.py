@@ -1,5 +1,8 @@
 from rest_framework import serializers
 from api.models import Seller, SellerInfo
+from comments.models import Rating
+from comments.serializers import RatingSerializer
+from django.db.models import Avg
 
 
 class SellerInfoSerializer(serializers.ModelSerializer):
@@ -23,11 +26,17 @@ class SellerInfoSerializer(serializers.ModelSerializer):
 
 class SellerSerializer(serializers.HyperlinkedModelSerializer):
     profile = SellerInfoSerializer(required=True)
-
+    ####
+    comments = RatingSerializer(many=True, read_only=True)
+    average_rating = serializers.SerializerMethodField()
+    #####
     class Meta:
         model = Seller
-        fields = ('url', 'email', 'first_name', 'last_name', 'password', 'profile')
-        extra_kwargs = {'password': {'write_only': True}}
+        fields = ('url', 'email', 'first_name', 'last_name', 'password', 'profile', 'comments', 'average_rating') # <--- 2 new
+        extra_kwargs = {
+        'password': {'write_only': True},
+        }
+
 
     def create(self, validated_data):
         password = validated_data.pop('password')
@@ -58,3 +67,10 @@ class SellerSerializer(serializers.HyperlinkedModelSerializer):
         profile.save()
 
         return instance
+
+    def get_average_rating(self, obj):
+        average = obj.comments.aggregate(Avg('rating')).get('rating__avg')
+        if average is None:
+            return 0
+        else:
+            return round(average*2) / 2
