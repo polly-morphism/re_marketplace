@@ -74,30 +74,3 @@ class SellerSerializer(serializers.HyperlinkedModelSerializer):
             return 0
         else:
             return round(average*2) / 2
-
-
-"""
- reviews = serializers.PrimaryKeyRelatedField(
-            many=True,
-            read_only=True
-        )
-        average_rating = serializers.SerializerMethodField()
-
-        class Meta:
-            model = models.Course
-            fields = (
-                'id',
-                'title',
-                'url',
-                'reviews',
-                'average_rating'
-            )
-
-        def get_average_rating(self, obj):
-            average = obj.reviews.aggregate(Avg('rating')).get('rating__avg')
-            if average is None:
-                return 0
-            else:
-                return round(average*2) / 2
-
-"""
